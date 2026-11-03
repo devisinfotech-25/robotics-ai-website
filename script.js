@@ -1,0 +1,9 @@
+document.addEventListener('DOMContentLoaded',()=>{
+  const toggle=document.querySelector('.menu-toggle');
+  const nav=document.querySelector('.main-nav');
+  const closeMenu=()=>{if(!toggle||!nav)return;nav.classList.remove('open');toggle.classList.remove('active');toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-label','Open navigation');};
+  if(toggle&&nav){toggle.addEventListener('click',()=>{const open=!nav.classList.contains('open');nav.classList.toggle('open',open);toggle.classList.toggle('active',open);toggle.setAttribute('aria-expanded',String(open));toggle.setAttribute('aria-label',open?'Close navigation':'Open navigation');});nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeMenu));document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu();});document.addEventListener('click',e=>{if(nav.classList.contains('open')&&!nav.contains(e.target)&&!toggle.contains(e.target))closeMenu();});}
+  const current=location.pathname.split('/').pop()||'index.html';document.querySelectorAll('.main-nav a').forEach(a=>{if(a.getAttribute('href')===current)a.setAttribute('aria-current','page');});
+  const reveal=document.querySelectorAll('.reveal');if('IntersectionObserver'in window){const io=new IntersectionObserver((entries,obs)=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');obs.unobserve(entry.target);}}),{threshold:.12,rootMargin:'0px 0px -35px 0px'});reveal.forEach(el=>io.observe(el));}else reveal.forEach(el=>el.classList.add('visible'));
+  const form=document.getElementById('contactForm');if(form){form.addEventListener('submit',e=>{e.preventDefault();const status=form.querySelector('.form-status');if(!form.reportValidity())return;status.textContent='Your enquiry details are complete. Connect an email or form endpoint to enable message delivery.';});}
+});
